@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Lucas Reyes - SOC Analyst en formación | Ingeniería en Computación | Blue Team | Uruguay">
+<meta name="keywords" content="SOC Analyst, Blue Team, Ciberseguridad, Uruguay, Lucas Reyes">
+<meta property="og:title" content="Lucas Reyes | SOC Analyst">
+<meta property="og:description" content="Portfolio de Lucas Reyes — Ingeniería en Computación, Blue Team & Ciberseguridad defensiva">
+<meta property="og:type" content="website">
+<title>Lucas Reyes | SOC Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #00ff41;
+    --green-dim: #00cc33;
+    --green-dark: #003d0f;
+    --green-glow: rgba(0,255,65,0.12);
+    --amber: #ffb300;
+    --red: #ff2244;
+    --bg: #050a05;
+    --bg2: #080f08;
+    --bg3: #0d180d;
+    --border: rgba(0,255,65,0.2);
+    --border-bright: rgba(0,255,65,0.5);
+    --text: #c8e6c9;
+    --text-dim: #4a7a4a;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-display: 'Orbitron', monospace;
+    --font-body: 'Exo 2', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  ::selection { background: var(--green); color: #000; }
+
+  /* Scanlines overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(5,10,5,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--text-dim); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::before { content: '> '; color: transparent; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--green); }
+  .nav-links a:hover::before { color: var(--green); }
+
+  .nav-status {
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ===== LAYOUT ===== */
+  section {
+    padding: 6rem 0 4rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    width: 100%;
+  }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    padding-top: 54px;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .terminal-prompt {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .terminal-prompt span { color: var(--green); }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    color: var(--green);
+    line-height: 1;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 40px rgba(0,255,65,0.3);
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    letter-spacing: 4px;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  .hero-subtitle span { color: var(--amber); }
+
+  .hero-desc {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text);
+    max-width: 560px;
+    margin-bottom: 2.5rem;
+    opacity: 0.85;
+  }
+
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: 1px solid var(--green);
+    color: #000;
+    background: var(--green);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { background: transparent; color: var(--green); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: 1px solid var(--border-bright);
+    color: var(--green);
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover { border-color: var(--green); background: var(--green-glow); }
+
+  /* ===== SECTION HEADERS ===== */
+  .section-header { margin-bottom: 3rem; }
+
+  .section-label {
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 200px;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+
+  h2 .accent { color: var(--green); }
+
+  /* ===== ABOUT ===== */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .about-text {
+    font-family: var(--font-body);
+    line-height: 1.9;
+    color: var(--text);
+    opacity: 0.85;
+  }
+
+  .about-text p { margin-bottom: 1rem; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--green);
+  }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  /* ===== SKILLS ===== */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-category {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 1.5rem;
+  }
+
+  .skill-cat-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .skill-cat-title::before { content: '//'; color: var(--text-dim); }
+
+  .skill-item { margin-bottom: 0.8rem; }
+
+  .skill-name {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .skill-pct { color: var(--green); }
+
+  .skill-bar {
+    height: 3px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .skill-fill {
+    height: 100%;
+    background: var(--green);
+    transform-origin: left;
+    animation: fillBar 1.5s ease forwards;
+  }
+
+  @keyframes fillBar { from { transform: scaleX(0); } }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--green), transparent);
+  }
+
+  .timeline-item {
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -2.35rem;
+    top: 4px;
+    width: 10px; height: 10px;
+    border: 1px solid var(--green);
+    background: var(--bg);
+    transform: rotate(45deg);
+  }
+
+  .timeline-date {
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .timeline-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .timeline-org {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+  }
+
+  .timeline-desc {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+
+  /* ===== PROJECTS ===== */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--green);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .project-card:hover { border-color: var(--border-bright); background: var(--bg3); }
+  .project-card:hover::after { transform: scaleX(1); }
+
+  .project-link { display: block; text-decoration: none; color: inherit; }
+
+  .project-lang {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+  }
+
+  .project-desc {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text);
+    opacity: 0.75;
+    margin-bottom: 1rem;
+  }
+
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .tag {
+    font-size: 10px;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ===== CERTS ===== */
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .cert-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 1.2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .cert-icon {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--green);
+    line-height: 1;
+    min-width: 2rem;
+  }
+
+  .cert-name { font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .cert-issuer { font-size: 11px; color: var(--text-dim); }
+  .cert-year { font-size: 10px; color: var(--green); margin-top: 4px; }
+
+  /* ===== CONTACT ===== */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 1rem 1.2rem;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    color: inherit;
+  }
+
+  .contact-link:hover { border-color: var(--green); background: var(--green-glow); }
+
+  .contact-link-icon {
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 1px;
+    min-width: 2.5rem;
+  }
+
+  .contact-link-label { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
+  .contact-link-value { font-size: 13px; color: var(--text); }
+
+  .terminal-box {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    overflow: hidden;
+  }
+
+  .terminal-bar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .t-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .t-red { background: #ff5f56; }
+  .t-yellow { background: #ffbd2e; }
+  .t-green { background: #27c93f; }
+
+  .terminal-body { padding: 1.2rem; font-size: 12px; line-height: 2; }
+
+  .t-line { display: flex; gap: 8px; }
+  .t-prompt { color: var(--green); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--text-dim); padding-left: 1rem; }
+
+  .t-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--green);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  footer span { color: var(--green); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 0 1rem; }
+    h1 { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">LR<span>://</span>PORTFOLIO</a>
+  <ul class="nav-links">
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experiencia</a></li>
+    <li><a href="#projects">Proyectos</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>ONLINE</div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="container hero-content">
+    <div class="terminal-prompt"><span>~</span> lucas@portfolio:$ whoami</div>
+    <h1>LUCAS<br>REYES</h1>
+    <div class="hero-subtitle">SOC Analyst <span>// Blue Team</span> // Ing. Computación</div>
+    <p class="hero-desc">
+      Estudiante de Ingeniería en Computación apasionado por la seguridad defensiva y la respuesta a incidentes.
+      Enfocado en monitorización de seguridad, análisis de logs y detección de amenazas para proteger infraestructuras digitales.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-primary">// Ver proyectos</a>
+      <a href="#contact" class="btn-ghost">// Contactarme</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOBRE MÍ ===== -->
+<section id="about">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">01 // identificación</div>
+      <h2>Sobre <span class="accent">mí</span></h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Soy Lucas Reyes, estudiante avanzado de Ingeniería en Computación con fuerte orientación hacia la ciberseguridad defensiva. Mi pasión es entender cómo funcionan los ataques para poder defenderse de ellos mejor.</p>
+        <p>Me especializo en el lado azul: monitorización de eventos de seguridad, análisis de logs, correlación de alertas y respuesta a incidentes. Creo en aprender haciendo, por eso cada proyecto que construyo viene acompañado de documentación real.</p>
+        <p>Actualmente en formación continua a través de TryHackMe, laboratorios propios con Kali Linux y desarrollo de herramientas de automatización para entornos SOC.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-num">10+</div>
+          <div class="stat-label">Repositorios públicos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">Blue</div>
+          <div class="stat-label">Equipo favorito</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">UY</div>
+          <div class="stat-label">Basado en Uruguay</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">SOC</div>
+          <div class="stat-label">Objetivo profesional</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">02 // arsenal técnico</div>
+      <h2>Tech <span class="accent">Stack</span></h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <div class="skill-cat-title">Blue Team Ops</div>
+        <div class="skill-item">
+          <div class="skill-name"><span>SIEM / Log Analysis</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Threat Detection</span><span class="skill-pct">75%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Incident Response</span><span class="skill-pct">70%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Network Forensics</span><span class="skill-pct">65%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">Networking & OS</div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Linux / Kali</span><span class="skill-pct">85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>TCP/IP / Networking</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Wireshark / tcpdump</span><span class="skill-pct">70%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Windows / AD</span><span class="skill-pct">60%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">Automation & Dev</div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Python</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>JavaScript</span><span class="skill-pct">70%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Bash Scripting</span><span class="skill-pct">75%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Git / GitHub</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCIA ===== -->
+<section id="experience">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">03 // registro de actividad</div>
+      <h2>Experiencia <span class="accent">&amp; Estudios</span></h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2022 — PRESENTE</div>
+        <div class="timeline-title">Ingeniería en Computación</div>
+        <div class="timeline-org">Universidad · Uruguay</div>
+        <div class="timeline-desc">
+          Carrera de grado con énfasis en sistemas, redes y seguridad informática. Formación sólida en algoritmos,
+          arquitectura de computadoras, bases de datos y telecomunicaciones.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2023 — PRESENTE</div>
+        <div class="timeline-title">SOC Analyst Training</div>
+        <div class="timeline-org">TryHackMe · Self-paced</div>
+        <div class="timeline-desc">
+          Formación práctica en laboratorios de ciberseguridad: análisis de malware, threat hunting,
+          SIEM, Active Directory attacks & defensa, Wireshark, Splunk y más.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2024</div>
+        <div class="timeline-title">Desarrollo de QrSocAnalyzer</div>
+        <div class="timeline-org">Proyecto personal · GitHub</div>
+        <div class="timeline-desc">
+          Herramienta en Python para análisis de códigos QR en entornos SOC, con detección
+          de URLs maliciosas embebidas y automatización de análisis de amenazas.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2024 — PRESENTE</div>
+        <div class="timeline-title">Laboratorio personal de ciberseguridad</div>
+        <div class="timeline-org">Proyectos propios · GitHub</div>
+        <div class="timeline-desc">
+          Construcción y mantenimiento de laboratorio con Kali Linux para práctica de técnicas defensivas.
+          Documentación continua en repositorio cybersecurity-journey.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROYECTOS ===== -->
+<section id="projects">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">04 // repositorios activos</div>
+      <h2>Pro<span class="accent">yectos</span></h2>
+    </div>
+    <div class="projects-grid">
+      <a class="project-link" href="https://github.com/LucasreyesGitHub/QrSocAnalyzer" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-lang">Python</div>
+          <div class="project-name">QrSocAnalyzer</div>
+          <div class="project-desc">Herramienta de análisis de códigos QR para entornos SOC. Detecta URLs potencialmente maliciosas embebidas en QR codes con automatización en Python.</div>
+          <div class="project-tags">
+            <span class="tag">python</span><span class="tag">soc</span><span class="tag">blue-team</span><span class="tag">qr-analysis</span>
+          </div>
+        </div>
+      </a>
+      <a class="project-link" href="https://github.com/LucasreyesGitHub/cybersecurity-journey" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-lang">Markdown / Multi-tool</div>
+          <div class="project-name">cybersecurity-journey</div>
+          <div class="project-desc">Repositorio de aprendizaje continuo: labs de TryHackMe, comandos, conceptos de Kali Linux y práctica local documentada para futura referencia.</div>
+          <div class="project-tags">
+            <span class="tag">kali</span><span class="tag">tryhackme</span><span class="tag">docs</span><span class="tag">labs</span>
+          </div>
+        </div>
+      </a>
+      <a class="project-link" href="https://github.com/LucasreyesGitHub/EasyFood_uy" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-lang">Python</div>
+          <div class="project-name">EasyFood UY</div>
+          <div class="project-desc">Aplicación de delivery para el mercado uruguayo. Proyecto full-stack con backend en Python demostrando capacidades de desarrollo más allá de la seguridad.</div>
+          <div class="project-tags">
+            <span class="tag">python</span><span class="tag">full-stack</span><span class="tag">uruguay</span>
+          </div>
+        </div>
+      </a>
+      <a class="project-link" href="https://github.com/LucasreyesGitHub/telegram-to-sheets" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-lang">JavaScript</div>
+          <div class="project-name">Telegram → Sheets</div>
+          <div class="project-desc">Bot de Telegram con integración a Google Sheets para automatización de flujos de datos e inteligencia operativa mediante mensajería.</div>
+          <div class="project-tags">
+            <span class="tag">javascript</span><span class="tag">telegram-api</span><span class="tag">automation</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CERTIFICACIONES ===== -->
+<section id="certs">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">05 // credenciales verificadas</div>
+      <h2>Certifi<span class="accent">caciones</span></h2>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <div class="cert-icon">[T]</div>
+        <div>
+          <div class="cert-name">SOC Level 1</div>
+          <div class="cert-issuer">TryHackMe</div>
+          <div class="cert-year">En progreso</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">[G]</div>
+        <div>
+          <div class="cert-name">Google Cybersecurity Certificate</div>
+          <div class="cert-issuer">Coursera / Google</div>
+          <div class="cert-year">2024</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">[N]</div>
+        <div>
+          <div class="cert-name">Networking Fundamentals</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <div class="cert-year">Completar año</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">[+]</div>
+        <div>
+          <div class="cert-name">CompTIA Security+ (objetivo)</div>
+          <div class="cert-issuer">CompTIA</div>
+          <div class="cert-year">Próximamente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACTO ===== -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">06 // canal de comunicación</div>
+      <h2>Con<span class="accent">tacto</span></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-links">
+        <a href="https://github.com/LucasreyesGitHub" target="_blank" rel="noopener" class="contact-link">
+          <div class="contact-link-icon">GH</div>
+          <div>
+            <div class="contact-link-label">GITHUB</div>
+            <div class="contact-link-value">LucasreyesGitHub</div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/lucasreyes2003/" target="_blank" rel="noopener" class="contact-link">
+          <div class="contact-link-icon">LI</div>
+          <div>
+            <div class="contact-link-label">LINKEDIN</div>
+            <div class="contact-link-value">in/lucasreyes2003</div>
+          </div>
+        </a>
+        <!-- EDITAR: reemplazar con tu email real -->
+        <a href="mailto:tu@email.com" class="contact-link">
+          <div class="contact-link-icon">ML</div>
+          <div>
+            <div class="contact-link-label">EMAIL</div>
+            <div class="contact-link-value">tu@email.com</div>
+          </div>
+        </a>
+      </div>
+      <div class="terminal-box">
+        <div class="terminal-bar">
+          <div class="t-dot t-red"></div>
+          <div class="t-dot t-yellow"></div>
+          <div class="t-dot t-green"></div>
+          <span style="margin-left:8px">bash — terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">./contact --lucas</span></div>
+          <div class="t-line"><span class="t-out">&gt; Disponible para oportunidades</span></div>
+          <div class="t-line"><span class="t-out">&gt; Junior SOC Analyst</span></div>
+          <div class="t-line"><span class="t-out">&gt; Prácticas / Internship</span></div>
+          <div class="t-line"><span class="t-out">&gt; Colaboración en proyectos</span></div>
+          <div class="t-line" style="margin-top:8px"><span class="t-prompt">$</span><span class="t-cmd">status --open-to-work</span></div>
+          <div class="t-line"><span class="t-out">&gt; OPEN TO WORK <span style="color:#00ff41">✓</span></span></div>
+          <div class="t-line"><span class="t-prompt">$</span><span class="t-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Construido con <span>&lt;/&gt;</span> por Lucas Reyes &middot; 2025 &middot; Uruguay</p>
+</footer>
+
+</body>
+</html>
