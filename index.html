@@ -3,413 +3,689 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Lucas Reyes - Analista SOC en formación | 3 años exp. bancaria | Ing. Computación UdelaR | Montevideo">
-<title>Lucas Reyes | SOC Analyst</title>
+<title>Lucas Reyes · SOC Analyst</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --g:#00ff41;--glow:rgba(0,255,65,.12);--amb:#ffb300;
-  --bg:#050a05;--bg2:#080f08;--bg3:#0d180d;
-  --br:rgba(0,255,65,.18);--brb:rgba(0,255,65,.5);
-  --tx:#c8e6c9;--td:#4a7a4a;
-  --mono:'Share Tech Mono',monospace;
-  --disp:'Orbitron',monospace;
-  --body:'Exo 2',sans-serif;
+:root {
+  --white: #ffffff;
+  --off:   #f7f8fa;
+  --off2:  #eef0f4;
+  --ink:   #0d1117;
+  --ink2:  #1e2530;
+  --gray:  #6b7688;
+  --gray2: #9aa3b0;
+  --line:  #e2e6ec;
+  --accent:#0066ff;
+  --accent2:#e8f0ff;
+  --green: #00875a;
+  --green-bg:#e6f4ef;
+  --amber: #b45309;
+  --amber-bg:#fef3c7;
+  --red:   #dc2626;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --radius: 6px;
+  --max: 1080px;
+  --nav-h: 64px;
 }
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:var(--mono);overflow-x:hidden;cursor:crosshair}
-::selection{background:var(--g);color:#000}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--white); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s} .d4{transition-delay:.32s}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,10,5,.96);border-bottom:1px solid var(--br);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:54px;backdrop-filter:blur(10px)}
-.nav-logo{font-family:var(--disp);font-size:13px;color:var(--g);letter-spacing:2px;text-decoration:none}
-.nav-logo span{color:var(--td)}
-.nav-links{display:flex;gap:1.8rem;list-style:none}
-.nav-links a{font-size:10px;color:var(--td);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .2s}
-.nav-links a::before{content:'> ';color:transparent;transition:color .2s}
-.nav-links a:hover{color:var(--g)}
-.nav-links a:hover::before{color:var(--g)}
-.nav-status{font-size:10px;color:var(--g);letter-spacing:1px;display:flex;align-items:center;gap:6px}
-.sdot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+nav {
+  position: fixed; top:0; inset-inline:0; z-index:200;
+  height: var(--nav-h);
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 1px 20px rgba(0,0,0,.07); }
+.nav-inner {
+  max-width: var(--max); margin:0 auto; padding:0 2.5rem;
+  height:100%; display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo {
+  font-family: var(--mono); font-size:.875rem; font-weight:500;
+  color: var(--ink); text-decoration:none; letter-spacing:.04em;
+  display:flex; align-items:center; gap:.5rem;
+}
+.nav-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); }
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a { font-size:.8125rem; color:var(--gray); text-decoration:none; transition:color .2s; }
+.nav-links a:hover, .nav-links a.active { color:var(--ink); }
+.nav-badge {
+  font-family:var(--mono); font-size:.6875rem; font-weight:500;
+  color:var(--green); background:var(--green-bg); border:1px solid #b7dfce;
+  padding:.25rem .75rem; border-radius:100px; letter-spacing:.06em;
+}
 
 /* LAYOUT */
-section{padding:6rem 0 4rem;min-height:100vh;display:flex;align-items:center}
-.container{max-width:980px;margin:0 auto;padding:0 2rem;width:100%}
+.section { padding:6rem 0; }
+.section.alt { background:var(--off); }
+.section.dark { background:var(--ink); }
+.wrap { max-width:var(--max); margin:0 auto; padding:0 2.5rem; }
 
-/* HERO */
-#hero{min-height:100vh;padding-top:54px;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
-.hgrid{position:absolute;inset:0;background-image:linear-gradient(var(--br) 1px,transparent 1px),linear-gradient(90deg,var(--br) 1px,transparent 1px);background-size:40px 40px;opacity:.3}
-.hcontent{position:relative;z-index:1}
-.tprompt{font-size:12px;color:var(--td);margin-bottom:1rem;letter-spacing:1px}
-.tprompt span{color:var(--g)}
-h1{font-family:var(--disp);font-size:clamp(2.5rem,7vw,5rem);font-weight:900;color:var(--g);line-height:1;letter-spacing:-1px;margin-bottom:.5rem;text-shadow:0 0 40px rgba(0,255,65,.3)}
-.hsub{font-family:var(--disp);font-size:clamp(.85rem,1.8vw,1.2rem);color:var(--td);letter-spacing:3px;margin-bottom:2rem;text-transform:uppercase}
-.hsub span{color:var(--amb)}
-.hdesc{font-family:var(--body);font-size:1rem;line-height:1.8;color:var(--tx);max-width:600px;margin-bottom:2.5rem;opacity:.85}
-.hctas{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem}
-.btn-p{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1px solid var(--g);color:#000;background:var(--g);font-family:var(--mono);font-size:12px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;cursor:pointer;transition:all .2s}
-.btn-p:hover{background:transparent;color:var(--g)}
-.btn-g{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1px solid var(--brb);color:var(--g);background:transparent;font-family:var(--mono);font-size:12px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;cursor:pointer;transition:all .2s}
-.btn-g:hover{border-color:var(--g);background:var(--glow)}
-.badges{display:flex;flex-wrap:wrap;gap:8px}
-.badge{font-size:10px;padding:4px 10px;border:1px solid var(--br);color:var(--td);letter-spacing:1px;text-transform:uppercase}
-.badge.g{border-color:rgba(0,255,65,.4);color:var(--g)}
-.badge.a{border-color:rgba(255,179,0,.4);color:var(--amb)}
+/* SECTION LABEL */
+.s-label {
+  font-family:var(--mono); font-size:.6875rem; font-weight:500;
+  color:var(--accent); letter-spacing:.14em; text-transform:uppercase;
+  margin-bottom:.875rem; display:flex; align-items:center; gap:.75rem;
+}
+.s-label::before { content:''; display:block; width:20px; height:1px; background:var(--accent); }
+.s-title {
+  font-size: clamp(1.875rem, 3.5vw, 2.625rem);
+  font-weight:600; letter-spacing:-.025em; line-height:1.15;
+  color:var(--ink); margin-bottom:3rem;
+}
+.s-title .muted { color:var(--gray2); font-weight:300; }
+.s-title.light { color:var(--white); }
 
-/* SECTION HEADER */
-.sh{margin-bottom:3rem}
-.sl{font-size:10px;color:var(--g);letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:8px}
-.sl::after{content:'';flex:1;height:1px;background:var(--br);max-width:200px}
-h2{font-family:var(--disp);font-size:clamp(1.5rem,4vw,2.5rem);font-weight:700;color:var(--tx);letter-spacing:1px}
-h2 .acc{color:var(--g)}
+/* CHIPS */
+.chip {
+  font-family:var(--mono); font-size:.6875rem; font-weight:500;
+  padding:.25rem .75rem; border-radius:100px; letter-spacing:.06em;
+  text-transform:uppercase; border:1px solid var(--line);
+  color:var(--gray); background:var(--white);
+}
+.chip.blue { color:var(--accent); background:var(--accent2); border-color:#c7d9ff; }
+.chip.green { color:var(--green); background:var(--green-bg); border-color:#b7dfce; }
 
-/* ABOUT */
-.ag{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
-.at{font-family:var(--body);line-height:1.9;color:var(--tx);opacity:.85}
-.at p{margin-bottom:1rem}
-.ahl{border:1px solid rgba(255,179,0,.3);background:rgba(255,179,0,.04);padding:1rem 1.2rem;margin-top:1rem;font-size:13px}
-.ahl strong{color:var(--amb)}
-.astats{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.sc{border:1px solid var(--br);padding:1.2rem;background:var(--bg2);position:relative;overflow:hidden}
-.sc::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--g)}
-.sn{font-family:var(--disp);font-size:1.8rem;font-weight:700;color:var(--g);line-height:1}
-.sl2{font-size:10px;color:var(--td);letter-spacing:1px;margin-top:4px;line-height:1.4}
+/* BTNS */
+.btn {
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-family:var(--sans); font-size:.875rem; font-weight:500;
+  text-decoration:none; padding:.75rem 1.5rem;
+  border-radius:var(--radius); cursor:pointer; border:none;
+  transition:background .2s, box-shadow .2s, transform .15s;
+}
+.btn:hover { transform:translateY(-1px); }
+.btn-solid { background:var(--ink); color:var(--white); }
+.btn-solid:hover { background:var(--ink2); box-shadow:0 4px 20px rgba(13,17,23,.18); }
+.btn-outline { background:transparent; color:var(--ink); border:1px solid var(--line); }
+.btn-outline:hover { border-color:var(--ink); background:var(--off); }
 
-/* SKILLS */
-.skgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
-.skcat{border:1px solid var(--br);background:var(--bg2);padding:1.5rem}
-.sktitle{font-size:10px;letter-spacing:3px;color:var(--amb);text-transform:uppercase;margin-bottom:1.2rem;display:flex;align-items:center;gap:8px}
-.sktitle::before{content:'//';color:var(--td)}
-.ski{margin-bottom:.8rem}
-.skn{display:flex;justify-content:space-between;font-size:12px;color:var(--tx);margin-bottom:4px}
-.skp{color:var(--g)}
-.skbar{height:3px;background:var(--bg3);border:1px solid var(--br);overflow:hidden}
-.skfill{height:100%;background:var(--g);transform-origin:left;animation:fill 1.5s ease forwards}
-@keyframes fill{from{transform:scaleX(0)}}
+/* ── HERO ── */
+#hero {
+  min-height:100vh; padding-top:var(--nav-h);
+  display:flex; align-items:center;
+  background:var(--white); position:relative; overflow:hidden;
+}
+#hero::before {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(ellipse 90% 90% at 50% 50%, black 20%, transparent 100%);
+  opacity:.35;
+}
+.hero-inner {
+  max-width:var(--max); margin:0 auto; padding:5rem 2.5rem;
+  display:grid; grid-template-columns:1fr 390px; gap:4rem; align-items:center;
+  position:relative; z-index:1;
+}
+.hero-eyebrow { display:flex; align-items:center; gap:.625rem; margin-bottom:2rem; flex-wrap:wrap; }
+.hero-name {
+  font-size: clamp(3rem, 6.5vw, 5rem);
+  font-weight:600; letter-spacing:-.04em; line-height:.95;
+  color:var(--ink); margin-bottom:1.5rem;
+}
+.hero-name span { color:var(--accent); }
+.hero-tagline {
+  font-size:1.0625rem; font-weight:300; color:var(--gray);
+  line-height:1.7; max-width:460px; margin-bottom:2.5rem;
+}
+.hero-tagline strong { color:var(--ink); font-weight:500; }
+.hero-ctas { display:flex; gap:.875rem; flex-wrap:wrap; }
+.hero-stats {
+  display:flex; gap:2.5rem; margin-top:3rem;
+  padding-top:2rem; border-top:1px solid var(--line);
+}
+.hs-val { font-size:1.625rem; font-weight:600; letter-spacing:-.04em; display:block; }
+.hs-label { font-size:.75rem; color:var(--gray); font-weight:300; display:block; margin-top:.2rem; }
 
-/* TIMELINE */
-.tl{position:relative;padding-left:2rem}
-.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--g),transparent)}
-.tli{margin-bottom:2.5rem;position:relative}
-.tld{position:absolute;left:-2.35rem;top:4px;width:10px;height:10px;border:1px solid var(--g);background:var(--bg);transform:rotate(45deg)}
-.tld.a{border-color:var(--amb)}
-.tldate{font-size:10px;color:var(--g);letter-spacing:2px;margin-bottom:4px}
-.tldate.a{color:var(--amb)}
-.tltitle{font-family:var(--disp);font-size:1rem;color:var(--tx);margin-bottom:2px}
-.tlorg{font-size:12px;color:var(--td);margin-bottom:.8rem}
-.tldesc{font-family:var(--body);font-size:.9rem;color:var(--tx);line-height:1.7;opacity:.8}
-.tldesc ul{padding-left:1.2rem;margin-top:4px}
-.tldesc li{margin-bottom:3px}
-.award{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;color:var(--amb);border:1px solid rgba(255,179,0,.3);padding:3px 10px}
+/* TERMINAL CARD */
+.t-card { background:var(--off); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.t-bar {
+  padding:1rem 1.25rem; border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:.625rem;
+}
+.td { width:9px; height:9px; border-radius:50%; }
+.td-r{background:#ff5f57} .td-y{background:#febc2e} .td-g{background:#28c840}
+.t-title { flex:1; text-align:center; font-family:var(--mono); font-size:.6875rem; color:var(--gray2); }
+.t-body { padding:1.25rem; }
+.t-row {
+  display:flex; align-items:baseline; gap:.625rem;
+  font-family:var(--mono); font-size:.75rem; line-height:1.75; color:var(--gray);
+}
+.t-p { color:var(--green); white-space:nowrap; }
+.t-c { color:var(--ink); }
+.t-v { color:var(--accent); }
+.t-ok { color:var(--green); }
+.t-dim { color:var(--gray2); }
+.t-gap { height:.5rem; display:block; }
+.blink {
+  display:inline-block; width:7px; height:12px;
+  background:var(--accent); vertical-align:middle; margin-left:2px;
+  animation:bl 1.1s step-end infinite;
+}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
 
-/* PROJECTS */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
-.pcard{border:1px solid var(--br);background:var(--bg2);padding:1.5rem;position:relative;overflow:hidden;display:block;text-decoration:none;color:inherit;transition:border-color .3s,background .3s}
-.pcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--g);transform:scaleX(0);transform-origin:left;transition:transform .3s}
-.pcard:hover{border-color:var(--brb);background:var(--bg3)}
-.pcard:hover::after{transform:scaleX(1)}
-.plang{font-size:10px;letter-spacing:2px;color:var(--amb);text-transform:uppercase;margin-bottom:.8rem}
-.pname{font-family:var(--disp);font-size:1rem;color:var(--g);margin-bottom:.5rem}
-.pdesc{font-family:var(--body);font-size:.85rem;line-height:1.6;color:var(--tx);opacity:.75;margin-bottom:1rem}
-.ptags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:10px;padding:3px 8px;border:1px solid var(--br);color:var(--td);letter-spacing:1px}
+/* ── SECURITY TICKER ── */
+.ticker-wrap { background:var(--off2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:1rem 0; overflow:hidden; }
+.ticker {
+  display:flex; gap:3rem;
+  animation:tick 22s linear infinite; white-space:nowrap;
+}
+.ticker span {
+  font-family:var(--mono); font-size:.6875rem; color:var(--gray2);
+  letter-spacing:.1em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.75rem;
+}
+.ticker span::before { content:'//'; color:var(--accent); opacity:.5; }
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* CERTS */
-.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-.ccard{border:1px solid var(--br);background:var(--bg2);padding:1.2rem;display:flex;align-items:flex-start;gap:1rem}
-.cicon{font-family:var(--disp);font-size:1.3rem;color:var(--g);line-height:1;min-width:2rem}
-.cname{font-size:13px;color:var(--tx);margin-bottom:2px}
-.ciss{font-size:11px;color:var(--td)}
-.cyr{font-size:10px;color:var(--g);margin-top:4px}
-.cyr.a{color:var(--amb)}
+/* ── ABOUT ── */
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
+.about-lead { font-size:1.0625rem; font-weight:300; color:var(--gray); line-height:1.8; margin-bottom:1.5rem; }
+.about-lead strong { color:var(--ink); font-weight:500; }
+.about-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:2rem; }
 
-/* CONTACT */
-.ctgrid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
-.ctlinks{display:flex;flex-direction:column;gap:1rem}
-.ctlink{display:flex;align-items:center;gap:1rem;border:1px solid var(--br);background:var(--bg2);padding:1rem 1.2rem;text-decoration:none;color:inherit;transition:border-color .2s,background .2s}
-.ctlink:hover{border-color:var(--g);background:var(--glow)}
-.cticon{font-size:10px;color:var(--g);letter-spacing:1px;min-width:2.8rem}
-.ctlbl{font-size:11px;color:var(--td);letter-spacing:1px}
-.ctval{font-size:12px;color:var(--tx)}
-.tbox{border:1px solid var(--br);background:var(--bg2);overflow:hidden}
-.tbar{background:var(--bg3);border-bottom:1px solid var(--br);padding:8px 12px;display:flex;align-items:center;gap:6px;font-size:10px;color:var(--td)}
-.tdot{width:8px;height:8px;border-radius:50%}
-.tr{background:#ff5f56}.ty{background:#ffbd2e}.tg2{background:#27c93f}
-.tbody{padding:1.2rem;font-size:12px;line-height:2}
-.tline{display:flex;gap:8px}
-.tp{color:var(--g)}.tc{color:var(--tx)}.to{color:var(--td);padding-left:1rem}
-.tcur{display:inline-block;width:8px;height:14px;background:var(--g);animation:blink 1s step-end infinite;vertical-align:middle}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.highlight-list { display:flex; flex-direction:column; gap:.875rem; }
+.hl-item {
+  display:flex; align-items:flex-start; gap:1rem;
+  padding:1.125rem; background:var(--white);
+  border:1px solid var(--line); border-radius:var(--radius);
+  transition:border-color .25s, box-shadow .25s, transform .25s;
+}
+.hl-item:hover { border-color:#d0daf0; box-shadow:0 2px 14px rgba(0,102,255,.06); transform:translateX(3px); }
+.hl-icon {
+  width:34px; height:34px; flex-shrink:0;
+  background:var(--accent2); border-radius:var(--radius);
+  display:flex; align-items:center; justify-content:center; font-size:.9rem;
+}
+.hl-name { font-size:.875rem; font-weight:500; color:var(--ink); }
+.hl-sub { font-size:.8rem; color:var(--gray); font-weight:300; margin-top:.15rem; }
 
-footer{border-top:1px solid var(--br);padding:2rem;text-align:center;font-size:11px;color:var(--td);letter-spacing:2px}
-footer span{color:var(--g)}
+/* ── SKILLS ── */
+.sk-cols { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+.sk-card {
+  background:var(--white); border:1px solid var(--line);
+  border-radius:8px; padding:1.75rem;
+  transition:box-shadow .25s, transform .25s;
+}
+.sk-card:hover { box-shadow:0 4px 22px rgba(0,0,0,.06); transform:translateY(-2px); }
+.sk-head {
+  display:flex; align-items:center; gap:.75rem;
+  margin-bottom:1.625rem; padding-bottom:1.25rem; border-bottom:1px solid var(--line);
+}
+.sk-icon { font-size:1rem; }
+.sk-name { font-size:.8125rem; font-weight:500; color:var(--ink); }
+.sk-row { display:flex; justify-content:space-between; margin-bottom:.35rem; }
+.sk-lbl { font-size:.8rem; color:var(--gray); }
+.sk-pct { font-family:var(--mono); font-size:.75rem; color:var(--accent); }
+.sk-track { height:3px; background:var(--off2); border-radius:100px; overflow:hidden; margin-bottom:1.125rem; }
+.sk-fill {
+  height:100%; border-radius:100px;
+  background:linear-gradient(90deg,#4d94ff,var(--accent));
+  transform:scaleX(0); transform-origin:left;
+  transition:transform 1.1s cubic-bezier(.22,1,.36,1);
+}
+.sk-item.in .sk-fill { transform:scaleX(1); }
 
-@media(max-width:768px){.ag,.ctgrid{grid-template-columns:1fr}.nav-links{display:none}.astats{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.container{padding:0 1rem}h1{font-size:2.5rem}}
+/* ── EXPERIENCE ── */
+.xp-grid { display:grid; grid-template-columns:220px 1fr; gap:3rem; align-items:start; }
+.xp-nav { position:sticky; top:calc(var(--nav-h) + 2rem); }
+.xp-tabs { display:flex; flex-direction:column; gap:.25rem; }
+.xp-tab {
+  font-family:var(--sans); font-size:.875rem; color:var(--gray);
+  padding:.625rem 1rem; border-radius:var(--radius);
+  cursor:pointer; border:1px solid transparent;
+  background:none; text-align:left; transition:all .2s;
+}
+.xp-tab:hover { color:var(--ink); background:var(--off); }
+.xp-tab.active { color:var(--ink); background:var(--accent2); border-color:#c7d9ff; font-weight:500; }
+.xp-panel { display:none; }
+.xp-panel.active { display:block; }
+.xp-period {
+  font-family:var(--mono); font-size:.6875rem; color:var(--accent);
+  letter-spacing:.08em; margin-bottom:.75rem;
+  display:flex; align-items:center; gap:.5rem;
+}
+.xp-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); }
+.xp-dot.live { animation:pdot 2s infinite; }
+@keyframes pdot{0%,100%{box-shadow:0 0 0 0 rgba(0,102,255,.4)}50%{box-shadow:0 0 0 5px rgba(0,102,255,0)}}
+.xp-role { font-size:1.4375rem; font-weight:600; letter-spacing:-.025em; color:var(--ink); margin-bottom:.25rem; }
+.xp-org { font-size:.9375rem; color:var(--gray); font-weight:300; margin-bottom:1.375rem; }
+.xp-org strong { color:var(--ink); font-weight:500; }
+.xp-items { display:flex; flex-direction:column; gap:.5rem; margin-bottom:1.5rem; }
+.xp-li { display:flex; gap:.75rem; font-size:.875rem; color:var(--gray); line-height:1.6; }
+.xp-li::before { content:'—'; color:var(--accent); flex-shrink:0; }
+.xp-li strong { color:var(--ink); font-weight:500; }
+.award { display:inline-flex; align-items:center; gap:.5rem; font-size:.8rem; font-weight:500; color:var(--amber); background:var(--amber-bg); border:1px solid #fcd88a; padding:.375rem 1rem; border-radius:100px; }
+
+/* ── PROJECTS ── */
+.proj-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.125rem; }
+.proj-card {
+  border:1px solid var(--line); border-radius:10px; padding:1.875rem;
+  text-decoration:none; background:var(--white);
+  display:flex; flex-direction:column;
+  transition:border-color .25s, box-shadow .25s, transform .25s;
+}
+.proj-card:hover { border-color:#c0d0f0; box-shadow:0 6px 30px rgba(0,102,255,.08); transform:translateY(-3px); }
+.proj-num { font-family:var(--mono); font-size:.6875rem; color:var(--gray2); margin-bottom:1.25rem; letter-spacing:.06em; }
+.proj-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.875rem; }
+.proj-name { font-size:1.1875rem; font-weight:600; color:var(--ink); letter-spacing:-.02em; line-height:1.25; }
+.proj-arrow {
+  width:30px; height:30px; border:1px solid var(--line); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.875rem; color:var(--gray2); flex-shrink:0;
+  transition:background .2s, border-color .2s, color .2s, transform .2s;
+}
+.proj-card:hover .proj-arrow { background:var(--ink); border-color:var(--ink); color:var(--white); transform:rotate(-45deg); }
+.proj-desc { font-size:.875rem; color:var(--gray); line-height:1.65; margin-bottom:1.375rem; flex:1; }
+.proj-tags { display:flex; flex-wrap:wrap; gap:.375rem; }
+.proj-tag { font-family:var(--mono); font-size:.65rem; font-weight:500; padding:.2rem .625rem; border-radius:100px; border:1px solid var(--line); color:var(--gray2); }
+.proj-tag.hi { border-color:#c7d9ff; color:var(--accent); background:var(--accent2); }
+
+/* ── CERTS ── */
+.cert-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+.cert-card {
+  border:1px solid var(--line); border-radius:10px; padding:1.5rem;
+  background:var(--white); transition:box-shadow .25s, transform .25s;
+}
+.cert-card:hover { box-shadow:0 4px 22px rgba(0,0,0,.06); transform:translateY(-2px); }
+.cert-icon {
+  width:40px; height:40px; background:var(--off2); border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:.75rem; font-weight:500;
+  color:var(--ink); margin-bottom:1.125rem; border:1px solid var(--line);
+}
+.cert-name { font-size:.875rem; font-weight:500; color:var(--ink); line-height:1.3; margin-bottom:.25rem; }
+.cert-org { font-size:.8rem; color:var(--gray); font-weight:300; margin-bottom:1rem; }
+.cert-badge { font-family:var(--mono); font-size:.65rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; padding:.25rem .625rem; border-radius:100px; border:1px solid; display:inline-block; }
+.cert-badge.done { color:var(--green); background:var(--green-bg); border-color:#b7dfce; }
+.cert-badge.wip  { color:var(--amber); background:var(--amber-bg); border-color:#fcd88a; }
+.cert-badge.next { color:var(--gray); background:var(--off2); border-color:var(--line); }
+
+/* ── CONTACT ── */
+#contact { background:var(--ink); }
+.contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
+.contact-h { font-size:clamp(1.875rem, 3.5vw, 2.75rem); font-weight:600; letter-spacing:-.03em; line-height:1.15; color:var(--white); margin-bottom:1.25rem; }
+.contact-h span { color:#4d94ff; }
+.contact-sub { font-size:.9375rem; color:#8891a0; font-weight:300; line-height:1.7; margin-bottom:2rem; }
+.roles { display:flex; flex-direction:column; gap:.5rem; }
+.role-i { display:flex; align-items:center; gap:.625rem; font-size:.875rem; color:#8891a0; }
+.role-i::before { content:''; width:5px; height:5px; border-radius:50%; background:#4d94ff; flex-shrink:0; }
+.c-links { display:flex; flex-direction:column; gap:.625rem; }
+.c-link {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 1.25rem; background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08); border-radius:var(--radius);
+  text-decoration:none; transition:background .2s, border-color .2s;
+}
+.c-link:hover { background:rgba(77,148,255,.08); border-color:rgba(77,148,255,.3); }
+.c-left { display:flex; align-items:center; gap:.875rem; }
+.c-badge { width:34px; height:34px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.65rem; color:#4d94ff; font-weight:500; flex-shrink:0; }
+.c-info { display:flex; flex-direction:column; gap:.1rem; }
+.c-lbl { font-family:var(--mono); font-size:.6rem; color:#4a5568; letter-spacing:.1em; text-transform:uppercase; }
+.c-val { font-size:.8125rem; color:#c8d0dc; }
+.c-arr { color:#4a5568; font-size:.875rem; transition:color .2s, transform .2s; }
+.c-link:hover .c-arr { color:#4d94ff; transform:translateX(3px); }
+
+/* FOOTER */
+footer { background:var(--ink); border-top:1px solid rgba(255,255,255,.06); padding:2rem 0; }
+.footer-inner { max-width:var(--max); margin:0 auto; padding:0 2.5rem; display:flex; align-items:center; justify-content:space-between; }
+.footer-l { font-size:.8125rem; color:#4a5568; }
+.footer-l strong { color:#8891a0; font-weight:500; }
+.footer-r { display:flex; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.6875rem; color:#4a5568; }
+.pls { width:6px; height:6px; border-radius:50%; background:#28c840; animation:pdot 2s infinite; }
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr;gap:3rem;}
+  .about-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .sk-cols{grid-template-columns:1fr 1fr;}
+  .xp-grid{grid-template-columns:1fr;}
+  .xp-nav{position:static;}
+  .xp-tabs{flex-direction:row;flex-wrap:wrap;}
+  .cert-grid{grid-template-columns:1fr 1fr;}
+  .contact-inner{grid-template-columns:1fr;gap:3rem;}
+}
+@media(max-width:600px){
+  .wrap,.nav-inner,.footer-inner{padding:0 1.25rem;}
+  .hero-inner{padding:3rem 1.25rem;}
+  .nav-links{display:none;}
+  .proj-grid{grid-template-columns:1fr;}
+  .sk-cols{grid-template-columns:1fr;}
+  .hero-stats{gap:1.5rem;}
+  .hero-name{font-size:clamp(2.5rem,10vw,3rem);}
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="#hero" class="nav-logo">LR<span>://</span>PORTFOLIO</a>
-  <ul class="nav-links">
-    <li><a href="#about">Sobre mi</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experiencia</a></li>
-    <li><a href="#projects">Proyectos</a></li>
-    <li><a href="#certs">Certs</a></li>
-    <li><a href="#contact">Contacto</a></li>
-  </ul>
-  <div class="nav-status"><div class="sdot"></div>OPEN TO WORK</div>
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo"><span class="nav-dot"></span>Lucas Reyes</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Stack</a></li>
+      <li><a href="#experience">XP</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#certs">Certs</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <span class="nav-badge">● Open to work</span>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hgrid"></div>
-  <div class="container hcontent">
-    <div class="tprompt"><span>~</span> lucas@portfolio:$ whoami</div>
-    <h1>LUCAS<br>REYES</h1>
-    <div class="hsub">Analista <span>// Blue Team</span> // SOC en formacion</div>
-    <p class="hdesc">
-      Analista con 3 anos de experiencia en entornos bancarios regulados y formacion activa en ciberseguridad.
-      Combino analisis tecnico de datos, automatizacion y seguridad defensiva para proteger infraestructuras digitales desde el Blue Team.
-    </p>
-    <div class="hctas">
-      <a href="#projects" class="btn-p">// Ver proyectos</a>
-      <a href="#contact" class="btn-g">// Contactarme</a>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow reveal">
+        <span class="chip blue">SOC Analyst</span>
+        <span class="chip">Blue Team</span>
+        <span class="chip">Montevideo, UY</span>
+      </div>
+      <h1 class="hero-name reveal d1">Lucas<br><span>Reyes</span></h1>
+      <p class="hero-tagline reveal d2">
+        Analista con <strong>3 años en entornos bancarios regulados</strong>, en transición activa hacia ciberseguridad defensiva. Detección de amenazas, análisis de logs y automatización SOC.
+      </p>
+      <div class="hero-ctas reveal d3">
+        <a href="#projects" class="btn btn-solid">Ver proyectos →</a>
+        <a href="#contact" class="btn btn-outline">Contactarme</a>
+      </div>
+      <div class="hero-stats reveal d4">
+        <div><span class="hs-val">3+</span><span class="hs-label">Años exp. bancaria</span></div>
+        <div><span class="hs-val">4</span><span class="hs-label">Proyectos activos</span></div>
+        <div><span class="hs-val">🏆</span><span class="hs-label">Premio Ceibal</span></div>
+        <div><span class="hs-val">B2+</span><span class="hs-label">Inglés</span></div>
+      </div>
     </div>
-    <div class="badges">
-      <span class="badge g">Montevideo, Uruguay</span>
-      <span class="badge g">Ingles Avanzado</span>
-      <span class="badge a">Premio Ceibal</span>
-      <span class="badge">UdelaR · Ing. Computacion</span>
-      <span class="badge">3 anos exp. bancaria</span>
+
+    <div class="t-card reveal d2">
+      <div class="t-bar">
+        <span class="td td-r"></span><span class="td td-y"></span><span class="td td-g"></span>
+        <span class="t-title">bash — lucas@soc:~</span>
+      </div>
+      <div class="t-body">
+        <div class="t-row"><span class="t-p">$</span><span class="t-c">whoami</span></div>
+        <div class="t-row"><span></span><span class="t-v">lucas_reyes</span></div>
+        <span class="t-gap"></span>
+        <div class="t-row"><span class="t-p">$</span><span class="t-c">cat profile.json</span></div>
+        <div class="t-row"><span></span><span class="t-dim">{</span></div>
+        <div class="t-row"><span></span><span class="t-dim">&nbsp;&nbsp;role:&nbsp;</span><span class="t-v">"SOC Analyst"</span></div>
+        <div class="t-row"><span></span><span class="t-dim">&nbsp;&nbsp;exp:&nbsp;</span><span class="t-v">"3yr banking"</span></div>
+        <div class="t-row"><span></span><span class="t-dim">&nbsp;&nbsp;team:&nbsp;</span><span class="t-v">"blue"</span></div>
+        <div class="t-row"><span></span><span class="t-dim">&nbsp;&nbsp;award:&nbsp;</span><span class="t-v">"Premio Ceibal 🏆"</span></div>
+        <div class="t-row"><span></span><span class="t-dim">&nbsp;&nbsp;open:&nbsp;</span><span class="t-ok">true</span></div>
+        <div class="t-row"><span></span><span class="t-dim">}</span></div>
+        <span class="t-gap"></span>
+        <div class="t-row"><span class="t-p">$</span><span class="t-c">./status</span></div>
+        <div class="t-row"><span></span><span class="t-ok">✓ Available for opportunities</span></div>
+        <div class="t-row"><span class="t-p">$</span><span class="blink"></span></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- SOBRE MI -->
-<section id="about">
-  <div class="container">
-    <div class="sh">
-      <div class="sl">01 // identificacion</div>
-      <h2>Sobre <span class="acc">mi</span></h2>
-    </div>
-    <div class="ag">
-      <div class="at">
-        <p>Soy Lucas Reyes, estudiante de <strong>Ingenieria en Computacion en UdelaR</strong> con 3 anos de experiencia profesional como Analista en <strong>Republica Microfinanzas</strong>, trabajando con sistemas core bancarios, reportes regulatorios FATCA/CRS e informacion sensible bajo estandares de auditoria.</p>
-        <p>Esa experiencia me dio algo diferencial: comprension real de como operan los datos en entornos regulados, y por que su seguridad es critica. Hoy estoy en transicion activa hacia ciberseguridad defensiva y operaciones SOC.</p>
-        <p>Mi enfoque es el <strong>Blue Team</strong>: deteccion de amenazas, analisis de logs, respuesta a incidentes y automatizacion de procesos de seguridad con Python y Bash.</p>
-        <div class="ahl">
-          <strong>Premio Ceibal</strong> &mdash; Reconocimiento al desarrollo de aplicaciones moviles e innovacion por el proyecto CapillApp.
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker">
+    <span>Threat Detection</span><span>SIEM Analysis</span><span>Blue Team Ops</span>
+    <span>Log Forensics</span><span>Incident Response</span><span>Python Automation</span>
+    <span>Linux Security</span><span>Network Defense</span><span>FATCA / CRS</span><span>SOC L1/L2</span>
+    <span>Threat Detection</span><span>SIEM Analysis</span><span>Blue Team Ops</span>
+    <span>Log Forensics</span><span>Incident Response</span><span>Python Automation</span>
+    <span>Linux Security</span><span>Network Defense</span><span>FATCA / CRS</span><span>SOC L1/L2</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="s-label reveal">01 · About</div>
+    <h2 class="s-title reveal d1">Quién soy <span class="muted">& qué aporto.</span></h2>
+    <div class="about-grid">
+      <div>
+        <p class="about-lead reveal">Estudiante de <strong>Ingeniería en Computación en UdelaR</strong> con 3 años de experiencia como Analista en <strong>República Microfinanzas</strong> — trabajando con sistemas core bancarios, reportes FATCA/CRS e información sensible bajo estándares de auditoría.</p>
+        <p class="about-lead reveal d1">Esa experiencia me da una perspectiva diferencial: entiendo los datos no solo técnicamente, sino también su <strong>criticidad operativa en entornos regulados</strong>. Hoy aplico ese conocimiento al Blue Team — detección de amenazas, análisis forense y automatización defensiva.</p>
+        <div class="about-chips reveal d2">
+          <span class="chip blue">Threat Detection</span>
+          <span class="chip blue">Log Analysis</span>
+          <span class="chip blue">SIEM</span>
+          <span class="chip">Python</span>
+          <span class="chip">Bash</span>
+          <span class="chip">Linux</span>
+          <span class="chip">SQL</span>
+          <span class="chip">Power BI</span>
+          <span class="chip">FATCA/CRS</span>
+          <span class="chip">Bantotal</span>
         </div>
       </div>
-      <div class="astats">
-        <div class="sc"><div class="sn">3+</div><div class="sl2">Anos experiencia bancaria profesional</div></div>
-        <div class="sc"><div class="sn">Blue</div><div class="sl2">Equipo favorito</div></div>
-        <div class="sc"><div class="sn">UY</div><div class="sl2">Montevideo, Uruguay</div></div>
-        <div class="sc"><div class="sn">B2+</div><div class="sl2">Ingles avanzado</div></div>
+      <div class="highlight-list">
+        <div class="hl-item reveal"><div class="hl-icon">🏦</div><div><div class="hl-name">3 años — Entorno Bancario Regulado</div><div class="hl-sub">República Microfinanzas · Core bancario, auditoría, cumplimiento</div></div></div>
+        <div class="hl-item reveal d1"><div class="hl-icon">🎓</div><div><div class="hl-name">Ing. Computación — UdelaR</div><div class="hl-sub">Sistemas, redes, seguridad informática · En curso</div></div></div>
+        <div class="hl-item reveal d2"><div class="hl-icon">🏆</div><div><div class="hl-name">Premio Ceibal — CapillApp</div><div class="hl-sub">Reconocimiento nacional por innovación en apps móviles</div></div></div>
+        <div class="hl-item reveal d3"><div class="hl-icon">🛡️</div><div><div class="hl-name">SOC Training — TryHackMe · HackTheBox</div><div class="hl-sub">Threat hunting, Kali Linux, networking, labs prácticos</div></div></div>
+        <div class="hl-item reveal d4"><div class="hl-icon">🌐</div><div><div class="hl-name">Inglés Avanzado — B2+</div><div class="hl-sub">Documentación técnica, entornos internacionales</div></div></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- SKILLS -->
-<section id="skills">
-  <div class="container">
-    <div class="sh">
-      <div class="sl">02 // arsenal tecnico</div>
-      <h2>Tech <span class="acc">Stack</span></h2>
-    </div>
-    <div class="skgrid">
-      <div class="skcat">
-        <div class="sktitle">Blue Team &amp; SOC</div>
-        <div class="ski"><div class="skn"><span>Log Analysis / SIEM</span><span class="skp">75%</span></div><div class="skbar"><div class="skfill" style="width:75%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Threat Detection</span><span class="skp">70%</span></div><div class="skbar"><div class="skfill" style="width:70%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Linux Fundamentals</span><span class="skp">80%</span></div><div class="skbar"><div class="skfill" style="width:80%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Redes TCP/IP, OSI</span><span class="skp">75%</span></div><div class="skbar"><div class="skfill" style="width:75%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Wireshark / Kali Linux</span><span class="skp">65%</span></div><div class="skbar"><div class="skfill" style="width:65%"></div></div></div>
+<section class="section alt" id="skills">
+  <div class="wrap">
+    <div class="s-label reveal">02 · Tech Stack</div>
+    <h2 class="s-title reveal d1">Arsenal <span class="muted">técnico.</span></h2>
+    <div class="sk-cols">
+      <div class="sk-card reveal">
+        <div class="sk-head"><span class="sk-icon">🛡️</span><span class="sk-name">Blue Team & SOC</span></div>
+        <div class="sk-item" data-w=".75"><div class="sk-row"><span class="sk-lbl">Log Analysis / SIEM</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".70"><div class="sk-row"><span class="sk-lbl">Threat Detection</span><span class="sk-pct">70%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".80"><div class="sk-row"><span class="sk-lbl">Linux Fundamentals</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".75"><div class="sk-row"><span class="sk-lbl">Redes TCP/IP · OSI</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".65"><div class="sk-row"><span class="sk-lbl">Wireshark / Kali</span><span class="sk-pct">65%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
       </div>
-      <div class="skcat">
-        <div class="sktitle">Datos &amp; Sistemas</div>
-        <div class="ski"><div class="skn"><span>SQL / SQLite</span><span class="skp">80%</span></div><div class="skbar"><div class="skfill" style="width:80%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Power BI</span><span class="skp">75%</span></div><div class="skbar"><div class="skfill" style="width:75%"></div></div></div>
-        <div class="ski"><div class="skn"><span>IBM Cognos</span><span class="skp">70%</span></div><div class="skbar"><div class="skfill" style="width:70%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Excel Avanzado</span><span class="skp">85%</span></div><div class="skbar"><div class="skfill" style="width:85%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Bantotal (core bancario)</span><span class="skp">80%</span></div><div class="skbar"><div class="skfill" style="width:80%"></div></div></div>
+      <div class="sk-card reveal d1">
+        <div class="sk-head"><span class="sk-icon">📊</span><span class="sk-name">Datos & Sistemas</span></div>
+        <div class="sk-item" data-w=".80"><div class="sk-row"><span class="sk-lbl">SQL / SQLite</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".75"><div class="sk-row"><span class="sk-lbl">Power BI</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".70"><div class="sk-row"><span class="sk-lbl">IBM Cognos</span><span class="sk-pct">70%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".85"><div class="sk-row"><span class="sk-lbl">Excel Avanzado</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".80"><div class="sk-row"><span class="sk-lbl">Bantotal</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
       </div>
-      <div class="skcat">
-        <div class="sktitle">Programacion &amp; Dev</div>
-        <div class="ski"><div class="skn"><span>Python</span><span class="skp">80%</span></div><div class="skbar"><div class="skfill" style="width:80%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Bash Scripting</span><span class="skp">75%</span></div><div class="skbar"><div class="skfill" style="width:75%"></div></div></div>
-        <div class="ski"><div class="skn"><span>C#</span><span class="skp">60%</span></div><div class="skbar"><div class="skfill" style="width:60%"></div></div></div>
-        <div class="ski"><div class="skn"><span>JavaScript</span><span class="skp">65%</span></div><div class="skbar"><div class="skfill" style="width:65%"></div></div></div>
-        <div class="ski"><div class="skn"><span>Git / GitHub</span><span class="skp">80%</span></div><div class="skbar"><div class="skfill" style="width:80%"></div></div></div>
+      <div class="sk-card reveal d2">
+        <div class="sk-head"><span class="sk-icon">⌨️</span><span class="sk-name">Programación & Dev</span></div>
+        <div class="sk-item" data-w=".80"><div class="sk-row"><span class="sk-lbl">Python</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".75"><div class="sk-row"><span class="sk-lbl">Bash Scripting</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".65"><div class="sk-row"><span class="sk-lbl">JavaScript</span><span class="sk-pct">65%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".60"><div class="sk-row"><span class="sk-lbl">C#</span><span class="sk-pct">60%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
+        <div class="sk-item" data-w=".80"><div class="sk-row"><span class="sk-lbl">Git / GitHub</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill"></div></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- EXPERIENCIA -->
-<section id="experience">
-  <div class="container">
-    <div class="sh">
-      <div class="sl">03 // registro de actividad</div>
-      <h2>Experiencia <span class="acc">&amp; Estudios</span></h2>
-    </div>
-    <div class="tl">
-      <div class="tli">
-        <div class="tld a"></div>
-        <div class="tldate a">2023 &mdash; 2026 &middot; EXPERIENCIA PROFESIONAL</div>
-        <div class="tltitle">Analista</div>
-        <div class="tlorg">Republica Microfinanzas &middot; Montevideo, Uruguay</div>
-        <div class="tldesc">
-          <ul>
-            <li>Analisis y gestion de datos en entornos bancarios regulados utilizando <strong>Bantotal</strong> (sistema core bancario).</li>
-            <li>Automatizacion de reportes regulatorios <strong>FATCA/CRS</strong> mediante IBM Cognos, Excel Avanzado y Access.</li>
-            <li>Manejo de informacion sensible bajo estandares de <strong>auditoria y cumplimiento normativo</strong>.</li>
-            <li>Generacion de reportes ejecutivos con Power BI y SQL para toma de decisiones operativas.</li>
-          </ul>
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+  <div class="wrap">
+    <div class="s-label reveal">03 · Experiencia</div>
+    <h2 class="s-title reveal d1">Trayectoria <span class="muted">profesional.</span></h2>
+    <div class="xp-grid">
+      <div class="xp-nav reveal">
+        <div class="xp-tabs">
+          <button class="xp-tab active" data-tab="0">República MF</button>
+          <button class="xp-tab" data-tab="1">UdelaR</button>
+          <button class="xp-tab" data-tab="2">SOC Training</button>
         </div>
       </div>
-      <div class="tli">
-        <div class="tld"></div>
-        <div class="tldate">2022 &mdash; PRESENTE &middot; EDUCACION</div>
-        <div class="tltitle">Ingenieria en Computacion</div>
-        <div class="tlorg">Universidad de la Republica (UdelaR) &middot; Montevideo</div>
-        <div class="tldesc">
-          Carrera de grado con enfasis en sistemas, redes y seguridad informatica. Formacion en algoritmos, arquitectura de computadoras, bases de datos y telecomunicaciones.
-          <br><span class="award">&#127942; Premio Ceibal &mdash; CapillApp &middot; Innovacion en apps moviles</span>
+      <div>
+        <div class="xp-panel active reveal" data-panel="0">
+          <div class="xp-period"><span class="xp-dot live"></span>2023 — 2026 · Experiencia profesional</div>
+          <div class="xp-role">Analista</div>
+          <div class="xp-org"><strong>República Microfinanzas</strong> · Montevideo, Uruguay</div>
+          <div class="xp-items">
+            <div class="xp-li">Análisis y gestión de datos en entornos bancarios regulados usando <strong>Bantotal</strong></div>
+            <div class="xp-li">Automatización de reportes <strong>FATCA/CRS</strong> con IBM Cognos, Excel y Access</div>
+            <div class="xp-li">Manejo de información sensible bajo estándares de <strong>auditoría y cumplimiento</strong></div>
+            <div class="xp-li">Reportes ejecutivos con <strong>Power BI y SQL</strong> para toma de decisiones</div>
+          </div>
         </div>
-      </div>
-      <div class="tli">
-        <div class="tld"></div>
-        <div class="tldate">2023 &mdash; PRESENTE &middot; FORMACION</div>
-        <div class="tltitle">Cybersecurity Training &mdash; SOC Analyst Path</div>
-        <div class="tlorg">TryHackMe &middot; HackTheBox &middot; Autoformacion</div>
-        <div class="tldesc">
-          <ul>
-            <li>Laboratorios practicos sobre Linux Fundamentals, Networking (OSI/TCP/IP, LAN) y seguridad defensiva.</li>
-            <li>Threat hunting, analisis de logs, uso de Kali Linux y VirtualBox en entornos controlados.</li>
-            <li>Portfolio SOC publicado: <a href="https://cyber-security-proyects.vercel.app" style="color:var(--g)" target="_blank" rel="noopener">cyber-security-proyects.vercel.app</a></li>
-          </ul>
+        <div class="xp-panel" data-panel="1">
+          <div class="xp-period"><span class="xp-dot live"></span>2022 — Presente · Educación</div>
+          <div class="xp-role">Ingeniería en Computación</div>
+          <div class="xp-org"><strong>Universidad de la República (UdelaR)</strong> · Montevideo</div>
+          <div class="xp-items">
+            <div class="xp-li">Carrera de grado con énfasis en sistemas, redes y seguridad informática</div>
+            <div class="xp-li">Formación en algoritmos, arquitectura, bases de datos y telecomunicaciones</div>
+          </div>
+          <span class="award">🏆 Premio Ceibal — CapillApp · Innovación en apps móviles</span>
+        </div>
+        <div class="xp-panel" data-panel="2">
+          <div class="xp-period"><span class="xp-dot live"></span>2023 — Presente · Formación activa</div>
+          <div class="xp-role">Cybersecurity Training — SOC Path</div>
+          <div class="xp-org"><strong>TryHackMe · HackTheBox</strong> · Autoformación</div>
+          <div class="xp-items">
+            <div class="xp-li">Labs prácticos: Linux Fundamentals, Networking OSI/TCP/IP, seguridad defensiva</div>
+            <div class="xp-li">Threat hunting, análisis de logs, Kali Linux en entornos controlados</div>
+            <div class="xp-li">Portfolio SOC en <strong>cyber-security-proyects.vercel.app</strong></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROYECTOS -->
-<section id="projects">
-  <div class="container">
-    <div class="sh">
-      <div class="sl">04 // repositorios activos</div>
-      <h2>Pro<span class="acc">yectos</span></h2>
-    </div>
-    <div class="pgrid">
-      <a class="pcard" href="https://github.com/LucasreyesGitHub/QrSocAnalyzer" target="_blank" rel="noopener">
-        <div class="plang">Python &middot; Blue Team</div>
-        <div class="pname">QrSocAnalyzer</div>
-        <div class="pdesc">Herramienta para analisis de codigos QR en entornos SOC. Detecta URLs maliciosas embebidas y automatiza la evaluacion de amenazas. Primer proyecto orientado a operaciones defensivas reales.</div>
-        <div class="ptags"><span class="tag">python</span><span class="tag">soc</span><span class="tag">blue-team</span><span class="tag">automation</span></div>
+<!-- PROJECTS -->
+<section class="section alt" id="projects">
+  <div class="wrap">
+    <div class="s-label reveal">04 · Proyectos</div>
+    <h2 class="s-title reveal d1">Trabajo <span class="muted">reciente.</span></h2>
+    <div class="proj-grid">
+      <a href="https://github.com/LucasreyesGitHub/QrSocAnalyzer" target="_blank" class="proj-card reveal">
+        <div class="proj-num">01 · Python · Blue Team</div>
+        <div class="proj-top"><h3 class="proj-name">QrSoc Analyzer</h3><span class="proj-arrow">↗</span></div>
+        <p class="proj-desc">Herramienta para análisis de códigos QR en entornos SOC. Detecta URLs maliciosas embebidas y automatiza la evaluación de amenazas en operaciones defensivas reales.</p>
+        <div class="proj-tags"><span class="proj-tag hi">Python</span><span class="proj-tag">SOC</span><span class="proj-tag">Blue Team</span><span class="proj-tag">Automation</span></div>
       </a>
-      <a class="pcard" href="https://github.com/LucasreyesGitHub/CyberSecurity_Proyects" target="_blank" rel="noopener">
-        <div class="plang">Docs &middot; Labs</div>
-        <div class="pname">CyberSecurity Learn &amp; Labs</div>
-        <div class="pdesc">Documentacion continua de laboratorios practicos sobre Linux Fundamentals, Networking y scripts en Python. Base del portfolio SOC publicado en Vercel.</div>
-        <div class="ptags"><span class="tag">kali</span><span class="tag">tryhackme</span><span class="tag">linux</span><span class="tag">networking</span></div>
+      <a href="https://github.com/LucasreyesGitHub/CyberSecurity_Proyects" target="_blank" class="proj-card reveal d1">
+        <div class="proj-num">02 · Docs · Labs</div>
+        <div class="proj-top"><h3 class="proj-name">CyberSecurity Labs</h3><span class="proj-arrow">↗</span></div>
+        <p class="proj-desc">Documentación continua de laboratorios: Linux Fundamentals, Networking y scripts Python. Base del portfolio SOC publicado en Vercel.</p>
+        <div class="proj-tags"><span class="proj-tag hi">Kali Linux</span><span class="proj-tag">TryHackMe</span><span class="proj-tag">Networking</span><span class="proj-tag">Linux</span></div>
       </a>
-      <a class="pcard" href="https://github.com/LucasreyesGitHub/EasyFood_uy" target="_blank" rel="noopener">
-        <div class="plang">Python &middot; Full-stack</div>
-        <div class="pname">EasyFood UY</div>
-        <div class="pdesc">Aplicacion de delivery para el mercado uruguayo. Proyecto full-stack con backend en Python que demuestra capacidades de desarrollo mas alla de la ciberseguridad.</div>
-        <div class="ptags"><span class="tag">python</span><span class="tag">full-stack</span><span class="tag">uruguay</span></div>
+      <a href="https://github.com/LucasreyesGitHub/EasyFood_uy" target="_blank" class="proj-card reveal d2">
+        <div class="proj-num">03 · Python · Full-stack</div>
+        <div class="proj-top"><h3 class="proj-name">EasyFood UY</h3><span class="proj-arrow">↗</span></div>
+        <p class="proj-desc">App de delivery para el mercado uruguayo. Full-stack con backend Python que demuestra capacidades más allá de la ciberseguridad.</p>
+        <div class="proj-tags"><span class="proj-tag hi">Python</span><span class="proj-tag">Full-Stack</span><span class="proj-tag">Uruguay</span></div>
       </a>
-      <a class="pcard" href="https://github.com/LucasreyesGitHub/telegram-to-sheets" target="_blank" rel="noopener">
-        <div class="plang">JavaScript &middot; Automation</div>
-        <div class="pname">Telegram &rarr; Sheets</div>
-        <div class="pdesc">Bot de Telegram con integracion a Google Sheets para automatizacion de flujos de datos e inteligencia operativa. Automatizacion aplicada a entornos reales.</div>
-        <div class="ptags"><span class="tag">javascript</span><span class="tag">telegram-api</span><span class="tag">automation</span><span class="tag">data</span></div>
+      <a href="https://github.com/LucasreyesGitHub/telegram-to-sheets" target="_blank" class="proj-card reveal d3">
+        <div class="proj-num">04 · JavaScript · Automation</div>
+        <div class="proj-top"><h3 class="proj-name">Telegram → Sheets</h3><span class="proj-arrow">↗</span></div>
+        <p class="proj-desc">Bot de Telegram con integración a Google Sheets para automatización de flujos de datos e inteligencia operativa aplicada a entornos reales.</p>
+        <div class="proj-tags"><span class="proj-tag hi">JavaScript</span><span class="proj-tag">Telegram API</span><span class="proj-tag">Automation</span><span class="proj-tag">Data</span></div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- CERTIFICACIONES -->
-<section id="certs">
-  <div class="container">
-    <div class="sh">
-      <div class="sl">05 // credenciales verificadas</div>
-      <h2>Certifi<span class="acc">caciones</span></h2>
+<!-- CERTS -->
+<section class="section" id="certs">
+  <div class="wrap">
+    <div class="s-label reveal">05 · Certificaciones</div>
+    <h2 class="s-title reveal d1">Credenciales <span class="muted">verificadas.</span></h2>
+    <div class="cert-grid">
+      <div class="cert-card reveal"><div class="cert-icon">G</div><div class="cert-name">Google Cybersecurity Certificate</div><div class="cert-org">Google / Coursera</div><span class="cert-badge done">✓ Completado</span></div>
+      <div class="cert-card reveal d1"><div class="cert-icon">N</div><div class="cert-name">Networking Fundamentals</div><div class="cert-org">Cisco Networking Academy</div><span class="cert-badge done">✓ Completado</span></div>
+      <div class="cert-card reveal d2"><div class="cert-icon">T</div><div class="cert-name">SOC Level 1</div><div class="cert-org">TryHackMe</div><span class="cert-badge wip">⟳ En progreso</span></div>
+      <div class="cert-card reveal d3"><div class="cert-icon">C+</div><div class="cert-name">CompTIA Security+</div><div class="cert-org">CompTIA</div><span class="cert-badge next">→ Próximo</span></div>
     </div>
-    <div class="cgrid">
-      <div class="ccard"><div class="cicon">[G]</div><div><div class="cname">Google Cybersecurity Certificate</div><div class="ciss">Google / Coursera</div><div class="cyr">&#10003; Completado</div></div></div>
-      <div class="ccard"><div class="cicon">[N]</div><div><div class="cname">Networking Fundamentals</div><div class="ciss">Cisco Networking Academy</div><div class="cyr">&#10003; Completado</div></div></div>
-      <div class="ccard"><div class="cicon">[T]</div><div><div class="cname">SOC Level 1</div><div class="ciss">TryHackMe</div><div class="cyr a">En progreso</div></div></div>
-      <div class="ccard"><div class="cicon">[+]</div><div><div class="cname">CompTIA Security+</div><div class="ciss">CompTIA</div><div class="cyr a">Proximo objetivo</div></div></div>
-    </div>
-    <p style="margin-top:1.5rem;font-size:11px;color:var(--td);letter-spacing:1px;">
-      &gt; Repositorio completo de certificaciones &rarr; <a href="https://github.com/LucasreyesGitHub" style="color:var(--g)" target="_blank" rel="noopener">github.com/LucasreyesGitHub</a>
-    </p>
   </div>
 </section>
 
-<!-- CONTACTO -->
-<section id="contact">
-  <div class="container">
-    <div class="sh">
-      <div class="sl">06 // canal de comunicacion</div>
-      <h2>Con<span class="acc">tacto</span></h2>
-    </div>
-    <div class="ctgrid">
-      <div class="ctlinks">
-        <a href="mailto:lucasrfcapilla.1b2015@gmail.com" class="ctlink">
-          <div class="cticon">ML</div><div><div class="ctlbl">EMAIL</div><div class="ctval">lucasrfcapilla.1b2015@gmail.com</div></div>
-        </a>
-        <a href="https://www.linkedin.com/in/lucasreyes2003/" target="_blank" rel="noopener" class="ctlink">
-          <div class="cticon">LI</div><div><div class="ctlbl">LINKEDIN</div><div class="ctval">in/lucasreyes2003</div></div>
-        </a>
-        <a href="https://github.com/LucasreyesGitHub" target="_blank" rel="noopener" class="ctlink">
-          <div class="cticon">GH</div><div><div class="ctlbl">GITHUB</div><div class="ctval">LucasreyesGitHub</div></div>
-        </a>
-        <a href="https://profile.hackthebox.com/profile/019cf22f-886d-70e4-8257-df0559d5969a" target="_blank" rel="noopener" class="ctlink">
-          <div class="cticon">HTB</div><div><div class="ctlbl">HACKTHEBOX</div><div class="ctval">Ver perfil &rarr;</div></div>
-        </a>
-        <a href="https://cyber-security-proyects.vercel.app" target="_blank" rel="noopener" class="ctlink">
-          <div class="cticon">SOC</div><div><div class="ctlbl">PORTFOLIO SOC</div><div class="ctval">cyber-security-proyects.vercel.app</div></div>
-        </a>
+<!-- CONTACT -->
+<section class="section dark" id="contact">
+  <div class="wrap">
+    <div class="contact-inner">
+      <div>
+        <div class="s-label reveal" style="color:#4d94ff;">06 · Contacto</div>
+        <h2 class="contact-h reveal d1">¿Trabajamos<br><span>juntos?</span></h2>
+        <p class="contact-sub reveal d2">Disponible para roles en ciberseguridad defensiva, análisis de datos y operaciones SOC. Inglés avanzado, experiencia en entornos regulados.</p>
+        <div class="roles reveal d3">
+          <div class="role-i">Junior SOC Analyst (L1/L2)</div>
+          <div class="role-i">Analista de Seguridad</div>
+          <div class="role-i">Analista de Datos</div>
+          <div class="role-i">Prácticas profesionales</div>
+        </div>
       </div>
-      <div class="tbox">
-        <div class="tbar">
-          <div class="tdot tr"></div><div class="tdot ty"></div><div class="tdot tg2"></div>
-          <span style="margin-left:8px">bash &mdash; terminal</span>
-        </div>
-        <div class="tbody">
-          <div class="tline"><span class="tp">$</span><span class="tc">./contact --lucas</span></div>
-          <div class="tline"><span class="to">&gt; Disponible para oportunidades</span></div>
-          <div class="tline"><span class="to">&gt; Junior SOC Analyst</span></div>
-          <div class="tline"><span class="to">&gt; Analista Seguridad / Datos</span></div>
-          <div class="tline"><span class="to">&gt; Practicas profesionales</span></div>
-          <div class="tline" style="margin-top:8px"><span class="tp">$</span><span class="tc">./diferencial</span></div>
-          <div class="tline"><span class="to">&gt; 3 anos exp. entorno bancario</span></div>
-          <div class="tline"><span class="to">&gt; Ingles avanzado</span></div>
-          <div class="tline"><span class="to">&gt; Premio Ceibal &#127942;</span></div>
-          <div class="tline" style="margin-top:8px"><span class="tp">$</span><span class="tc">status</span></div>
-          <div class="tline"><span class="to">&gt; OPEN TO WORK <span style="color:var(--g)">&#10003;</span></span></div>
-          <div class="tline"><span class="tp">$</span><span class="tcur"></span></div>
-        </div>
+      <div class="c-links reveal d1">
+        <a href="mailto:lucasrfcapilla.1b2015@gmail.com" class="c-link"><div class="c-left"><div class="c-badge">ML</div><div class="c-info"><span class="c-lbl">Email</span><span class="c-val">lucasrfcapilla.1b2015@gmail.com</span></div></div><span class="c-arr">→</span></a>
+        <a href="https://www.linkedin.com/in/lucasreyes2003/" target="_blank" class="c-link"><div class="c-left"><div class="c-badge">LI</div><div class="c-info"><span class="c-lbl">LinkedIn</span><span class="c-val">in/lucasreyes2003</span></div></div><span class="c-arr">→</span></a>
+        <a href="https://github.com/LucasreyesGitHub" target="_blank" class="c-link"><div class="c-left"><div class="c-badge">GH</div><div class="c-info"><span class="c-lbl">GitHub</span><span class="c-val">LucasreyesGitHub</span></div></div><span class="c-arr">→</span></a>
+        <a href="https://profile.hackthebox.com/profile/019cf22f-886d-70e4-8257-df0559d5969a" target="_blank" class="c-link"><div class="c-left"><div class="c-badge">HTB</div><div class="c-info"><span class="c-lbl">HackTheBox</span><span class="c-val">Ver perfil</span></div></div><span class="c-arr">→</span></a>
+        <a href="https://cyber-security-proyects.vercel.app" target="_blank" class="c-link"><div class="c-left"><div class="c-badge">SOC</div><div class="c-info"><span class="c-lbl">Portfolio SOC</span><span class="c-val">cyber-security-proyects.vercel.app</span></div></div><span class="c-arr">→</span></a>
       </div>
     </div>
   </div>
 </section>
 
 <footer>
-  <p>Lucas Reyes &middot; Montevideo, Uruguay &middot; Construido con <span>&lt;/&gt;</span> &middot; Blue Team 2025</p>
+  <div class="footer-inner">
+    <p class="footer-l"><strong>Lucas Reyes</strong> · Montevideo, Uruguay · 2025</p>
+    <div class="footer-r"><span class="pls"></span>OPEN TO WORK</div>
+  </div>
 </footer>
 
+<script>
+// Reveal
+const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.08, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Skill bars
+const sio = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if(e.isIntersecting){
+      const w = parseFloat(e.target.dataset.w||0);
+      e.target.classList.add('in');
+      e.target.querySelector('.sk-fill').style.transform = `scaleX(${w})`;
+    }
+  });
+},{threshold:.4});
+document.querySelectorAll('.sk-item').forEach(el => sio.observe(el));
+
+// XP tabs
+document.querySelectorAll('.xp-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const i = btn.dataset.tab;
+    document.querySelectorAll('.xp-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.xp-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelector(`.xp-panel[data-panel="${i}"]`).classList.add('active');
+  });
+});
+
+// Nav
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 30);
+  const secs = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  let cur = '';
+  secs.forEach(s => { if(scrollY >= s.offsetTop - 120) cur = s.id; });
+  links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+cur));
+},{passive:true});
+</script>
 </body>
 </html>
